@@ -11,4 +11,6 @@ urlpatterns = [
     path('topics/', views.get_topics, name='topics'),
     # Страница с подробной информацией по отдельной теме
     path('topics/<int:topic_id>/', views.get_topic, name='topic'),
+    # Страница для добавления новой темы
+    path('add_topic/', views.add_topic, name='add_topic'),
 ]
