@@ -5,7 +5,7 @@ from .forms import TopicForm, EntryForm
 
 # Create your views here.
 def get_index(request):
-    """ Домашняя страница приложния learning log """
+    """ Домашняя страница приложения learning log """
     return render(request, 'learning_logs/index.html')
 
 
@@ -30,7 +30,7 @@ def add_topic(request):
         # Данные не отправлялись; создается пустая форма.
         form = TopicForm()
     else:
-        # Отправленны данные POST; обработать данные.
+        # Отправлены данные POST; обработать данные.
         form = TopicForm(data=request.POST)
         if form.is_valid():
             form.save()
