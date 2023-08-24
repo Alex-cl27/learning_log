@@ -24,8 +24,7 @@ def get_topic(request, topic_id):
     """ Выводит одну тему и все ее записи. """
     topic = Topic.objects.get(id=topic_id)
     # Проверка владельца темы (owner)
-    if topic.owner != request.user:
-        raise Http404
+    check_topic_owner(request, topic)
 
     entries = topic.entry_set.order_by('-date_added')
     context = {'topic': topic, 'entries': entries}
@@ -56,6 +55,8 @@ def add_topic(request):
 def add_entry(request, topic_id):
     """ Добавляет новую запись по конкретной теме. """
     topic = Topic.objects.get(id=topic_id)
+    # Проверка владельца темы (owner)
+    check_topic_owner(request, topic)
     if request.method != 'POST':
         # Данные не отправлялись; создается пустая форма.
         form = EntryForm()
@@ -79,8 +80,7 @@ def edit_entry(request, entry_id):
     entry = Entry.objects.get(id=entry_id)
     topic = entry.topic
     # Проверка владельца темы (owner)
-    if topic.owner != request.user:
-        raise Http404
+    check_topic_owner(request, topic)
 
     if request.method != 'POST':
         # Исходный запрос; форма заполняется данными текущей записи.
@@ -94,3 +94,9 @@ def edit_entry(request, entry_id):
 
     context = {'entry': entry, 'topic': topic, 'form': form}
     return render(request, 'learning_logs/edit_entry.html', context)
+
+
+def check_topic_owner(request, topic):
+    """ Проверка владельца темы (owner) """
+    if topic.owner != request.user:
+        raise Http404
